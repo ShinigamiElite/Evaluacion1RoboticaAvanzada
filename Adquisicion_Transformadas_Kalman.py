@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import time
 
-# --- CONFIGURACIÓN ---
+# --- CONFIGURACION ---
 puerto = 'COM7'  # Cambia a '/dev/ttyUSB0' si vuelves a Linux
 baudrate = 115200
 Ts = 0.1  # 100ms
@@ -22,16 +22,16 @@ datos_kalman = np.zeros(N)
 Vs_t = np.zeros((len(s_valores), N)) 
 Vz_t = np.zeros((len(z_valores), N))
 
-# --- PARÁMETROS KALMAN ---
+# --- PARAMETROS KALMAN ---
 R = 0.5
 Q = 0.1
 P = 1.0
 x_estimado = 0.0
 k = 0  # Contador global
 
-# --- CONEXIÓN SERIAL ---
+# --- CONEXION SERIAL ---
 try:
-    # Usamos un timeout bajo para no congelar la animación si el ESP32 se retrasa
+    # Usamos un timeout bajo para no congelar la animacion si el ESP32 se retrasa
     s_serial = serial.Serial(puerto, baudrate, timeout=0.2)
     s_serial.setDTR(False)
     s_serial.setRTS(False)
@@ -41,17 +41,17 @@ except serial.SerialException as e:
     print(f"Error serial: {e}")
     exit()
 
-# --- CONFIGURACIÓN DE GRÁFICAS (Se hace solo UNA vez) ---
+# --- CONFIGURACION DE GRAFICAS (Se hace solo UNA vez) ---
 fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 10))
 fig.tight_layout(pad=4.0)
 
-# Inicializamos las líneas vacías
+# Inicializamos las lineas vacias
 line_orig, = ax1.plot([], [], 'g--', alpha=0.6, label='Original Limpia')
 line_ruido, = ax1.plot([], [], 'r', alpha=0.5, label='Con Ruido')
 line_kalman, = ax1.plot([], [], 'b', linewidth=2, label='Estimada (Kalman)')
 ax1.set_ylim([0, 4.0])
 ax1.set_xlim([0, N * Ts])
-ax1.set_title("Dominio del Tiempo: Adquisición y Filtrado")
+ax1.set_title("Dominio del Tiempo: Adquisicion y Filtrado")
 ax1.set_ylabel("Voltaje (V)")
 ax1.grid(True)
 ax1.legend(loc='upper right')
@@ -61,7 +61,7 @@ for s_val in s_valores:
     l, = ax2.plot([], [], label=f"s = {s_val}")
     lines_laplace.append(l)
 ax2.set_xlim([0, N * Ts])
-ax2.set_ylim([0, 5]) # Límite inicial, se autoescalará
+ax2.set_ylim([0, 5]) # Limite inicial, se autoescalara
 ax2.set_title("Frecuencia Continua (Magnitud Laplace)")
 ax2.grid(True)
 ax2.legend(loc='upper right')
@@ -71,13 +71,13 @@ for z_val in z_valores:
     l, = ax3.plot([], [], label=f"z = {np.round(z_val, 2)}")
     lines_z.append(l)
 ax3.set_xlim([0, N * Ts])
-ax3.set_ylim([0, 5]) # Límite inicial, se autoescalará
+ax3.set_ylim([0, 5]) # Limite inicial, se autoescalara
 ax3.set_title("Frecuencia Discreta (Magnitud Transformada Z)")
 ax3.set_xlabel("Tiempo (s)")
 ax3.grid(True)
 ax3.legend(loc='upper right')
 
-# --- FUNCIÓN DE ACTUALIZACIÓN EN TIEMPO REAL ---
+# --- FUNCION DE ACTUALIZACION EN TIEMPO REAL ---
 def update(frame):
     global k, P, x_estimado
     
@@ -93,7 +93,7 @@ def update(frame):
     except ValueError:
         return line_orig, line_ruido, line_kalman, *lines_laplace, *lines_z
 
-    # Puedes comentar esta línea si no quieres que la terminal se llene de texto
+    # Puedes comentar esta linea si no quieres que la terminal se llene de texto
     print(f"Procesando muestra {k}: Original={v_orig}V, Ruido={v_ruido}V")
 
     datos_original[k] = v_orig
@@ -136,12 +136,12 @@ def update(frame):
     k += 1
     return line_orig, line_ruido, line_kalman, *lines_laplace, *lines_z
 
-# Iniciar la animación
-print("Iniciando adquisición de datos...")
+# Iniciar la animacion
+print("Iniciando adquisicion de datos...")
 ani = animation.FuncAnimation(fig, update, interval=10, blit=False, cache_frame_data=False)
 
 plt.show()
 
 # Cierre seguro del puerto al cerrar la ventana
 s_serial.close()
-print("Ejecución finalizada.")
+print("Ejecucion finalizada.")
