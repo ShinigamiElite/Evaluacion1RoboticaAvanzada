@@ -1,6 +1,6 @@
 const int ldrPin = 34; // Pin ADC del ESP32
 const float VCC = 3.3;
-const int ADC_RES = 4095; // Resolución de 12 bits
+const int ADC_RES = 4095; // Resolucion de 12 bits
 
 void setup() {
   Serial.begin(115200);
@@ -11,11 +11,11 @@ void setup() {
 }
 
 void loop() {
-  // 1. Adquisición y escalamiento (Actividad 2)
+  // 1. Adquisicion y escalamiento (Actividad 2)
   int adcVal = analogRead(ldrPin);
   float voltageOriginal = (adcVal * VCC) / ADC_RES;
 
-  // 2. Incorporar ruido simulado mediante código (Actividad 2)
+  // 2. Incorporar ruido simulado mediante codigo (Actividad 2)
   // Generamos un ruido aleatorio entre -0.3V y +0.3V
   float ruido = ((float)random(-300, 300) / 1000.0);
   float voltageConRuido = voltageOriginal + ruido;
@@ -25,7 +25,7 @@ void loop() {
     voltageConRuido = 0.0;
   }
 
-  // 3. Enviar datos al entorno de análisis separados por coma
+  // 3. Enviar datos al entorno de analisis separados por coma
   Serial.print(voltageOriginal);
   Serial.print(",");
   Serial.println(voltageConRuido);
